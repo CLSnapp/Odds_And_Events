@@ -1,8 +1,10 @@
 const addNumButton = document.querySelector("#addNum");
 const sortOneButton = document.querySelector("#sortOne");
-const sortAllButton = document.querySelector("sortAll");
+const sortAllButton = document.querySelector("#sortAll");
 const userInput = document.querySelector("#number");
 const numberBankDisplay = document.querySelector("#numberBank output");
+const evenNumberDisplay = document.querySelector("#evens output");
+const oddNumberDisplay = document.querySelector("#odds output");
 
 const state = {
   numberBank: [],
@@ -15,59 +17,72 @@ addNumButton.addEventListener("click", (event) => {
   //display number in numberBankDisplay
 
   event.preventDefault();
-  const number = userInput.value;
-  state.numberBank.push(number);
-  console.log("numberBank" , state.numberBank);
+  // const number = userInput.value;
+  // state.numberBank.push(number);
+  addNumToBank();
   displayNumberBank();
-  
 });
+
+function addNumToBank() {
+  const number = Number.parseInt(userInput.value);
+
+  if (typeof number === "number" && !isNaN(number)) {
+    state.numberBank.push(number);
+  } else {
+    alert("WHOOOAAA THERE NELLLYY, ENTER A VALID NUMBER.");
+  }
+}
 
 function displayNumberBank() {
   numberBankDisplay.innerHTML = state.numberBank;
 }
 
 sortOneButton.addEventListener("click", (event) => {
-  //add first number to state.numberBank
-
-
   event.preventDefault();
+  //remove first number from state.numberBank
+  //figure out the number is odd or even
+  //add to oddNumbers or evenNumbers
+  const num = state.numberBank.shift();
+  // if (num % 2 == 0) {
+  //   state.evenNumbers.push(num);
+  // } else {
+  //   state.oddNumbers.push(num);
+  // }
+  sortNumber(num);
+  render();
+});
 
-  console.log("sortOne click");
+sortAllButton.addEventListener("click", (event) => {
+  event.preventDefault();
+  //move each number from state.numberBank to evenNumbers/oddNumbers
+  while (state.numberBank.length > 0) {
+    const num = state.numberBank.shift();
+    sortNumber(num);
+  }
+  render();
+});
 
-})
+function sortNumber(num) {
+  if (num % 2 == 0) {
+    state.evenNumbers.push(num);
+  } else {
+    state.oddNumbers.push(num);
+  }
+}
 
+function displayEvenNumbers() {
+  evenNumberDisplay.innerHTML = state.evenNumbers;
+}
 
-// function moveNumber() {
-//   const number = state.start.pop();
-//   state.target.push(number);
-// }
+function displayOddNumbers() {
+  oddNumberDisplay.innerHTML = state.oddNumbers;
+}
 
-// function renderStartNumber() {
-//   const startingNumber = state.start.map("#numberBank") => {
-//     const li = document.createElement("li");
-
-//     const button = document.createElement("button");
-//     button.textContent = "";
-//     li.append(button);
-
-//     button.addEventListener("click", () => {
-//       moveNumber();
-//       render();
-//     });
-
-//     return li;
-//   });
-
-//   const startingBank = document.querySelector("#numberBank");
-//   startingBank.replaceChildren(...startingNumber);
-// }
-
-// sortOneButton.addEventListener("click", function (event) {
-//     state.start.sort((a, b) => a - b);
-//     render();
-// });
-
-// sortAllButton.addEventListener("click", function (event) {
-//     state.start.sort((a, b) => a - b);
-//     render();
-// });
+function render() {
+  // //update bankdisplay
+  displayNumberBank();
+  // update evendisplay
+  displayEvenNumbers();
+  // update odddisplay
+  displayOddNumbers();
+}
